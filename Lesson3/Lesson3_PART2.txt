@@ -1,0 +1,71 @@
+--1.Найдите наименования продуктов, которые не продавались по понедельнкам
+SELECT [Name]
+FROM [Production].[Product]
+WHERE DATENAME(DW,[SellStartDate]) != 'Monday';
+
+--2.Найдите наименования продуктов, которые  продавались в апреле
+SELECT [Name]
+FROM [Production].[Product]
+WHERE month([SellStartDate])=4 ;
+
+--3.Вывести заказы, сделанные в первый день месяца
+SELECT [WorkOrderID],day([StartDate]) as d from [Production].[WorkOrder]
+where day([StartDate]) =1;
+
+--4. Вывести [ProductID],[Name] и разницу между датами [SellStartDate],[SellEndDate],
+где дата SellEndDate определена
+
+SELECT  [ProductID],[Name],DATEDIFF(DAY,[SellStartDate],[SellEndDate]) AS DIF
+FROM [Production].[Product]
+WHERE [SellEndDate] IS NOT NULL;
+
+--5. Вывести  [ProductID], [Name],[SellStartDate] и 
+дату, которая является результатом сложения 2ух месяцев и SellStartDate .
+
+SELECT [ProductID], [Name],[SellStartDate],DATEADD (month, 2,[SellStartDate]) AS DATE_2M
+FROM [Production].[Product]
+WHERE [SellEndDate] IS NOT NULL;
+
+--6. Вывести наименования продуктов и округленную цену до единиц 
+SELECT b.Name,round ([StandardPrice],0) as price
+FROM [Purchasing].[ProductVendor] a, [Production].[Product] b
+where a.[ProductID]=b.ProductID;
+
+--7.Вывести 5 первых символов почтового индекса
+SELECT left([PostalCode],5) as postal_code
+FROM [Person].[Address];
+
+--8. Вывести все символы города, преобразованного в верхний регистр
+SELECT  upper(city) as city
+FROM [Person].[Address];
+
+--9.Вывести строки в результате объединения городa и почтового индекса
+SELECT  concat([City],'+',[PostalCode]) as adress
+FROM [Person].[Address];
+
+--10. Вывести логины на основании EmailAddress
+SELECT *, replace([EmailAddress],'@adventure-works.com','') as login
+FROM [Person].[EmailAddress];
+
+--11.Вывести длину PasswordHash
+SELECT len([PasswordHash])
+FROM [Person].[Password];
+
+--12. Вывести наименования продуктов без конечных пробелов
+SELECT  rtrim([Name]) as name
+FROM [Production].[Product]
+;
+
+--13. Вывести наименования продуктов без начальных пробелов
+SELECT  ltrim([Name]) as name
+FROM [Production].[Product];
+
+--14. Вывести [CreditCardID],[CardType] и псоледние 10 цифр карты
+select [CreditCardID],[CardType],right( [CardNumber],10)
+from [Sales].[CreditCard];
+
+--15. Вывести все символы наименования, преобразованного в нижний регистр
+
+select [BusinessEntityID], lower([Name]) as name from
+[Sales].[Store];
+
