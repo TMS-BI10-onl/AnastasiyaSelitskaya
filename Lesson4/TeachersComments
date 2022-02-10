@@ -1,0 +1,13 @@
+Well done!
+
+4.
+a) -0.5
+There was a word "DISTINCT names". You should use COUNT(DISTINCT). In this case the final number is correct, but it's just an occasion.
+b)
+You can insert both rows in one statement.
+f)
+It would be better to use the view in this query, not it's inner code. You can just use ...FROM Sales.vSalesPerson.
+g)-1
+You solve the task for the case that DATEADD(DAY, 1, EOMONTH(GETDATE(), -1))  is returning the working day. You also need the solution for the weekday.
+
+Mark: 9
