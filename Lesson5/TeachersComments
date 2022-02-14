@@ -1,0 +1,10 @@
+Well done!
+
+6. -0.25
+We haven't learnt any constraints yet.
+
+11.-0.5
+It's not the easiest query. Why don't we use DATEADD(DAY,1-DAY(@D),@D)  as a variable?
+
+Mark: 9
+Test mark: 10
