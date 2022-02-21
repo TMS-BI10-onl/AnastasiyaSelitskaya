@@ -1,0 +1,20 @@
+Well done!
+
+A
+2nf is not about adding personal id's, it's about adding general id=pk.
+Also, don't add columns that didn't exist in the task - I did it just for example.
+
+B -1
+Nothing is impossible :)
+No define the level of normalization it's enough to see only columns.
+
+D -0.5
+Correct answer: 2nf
+You got incorrect answer because of the same problem: 2nf is not about adding personal id's, it's about adding general id=pk.
+
+E -0.5
+Correct answer: 2nf
+Same problem
+
+
+Mark: 8
