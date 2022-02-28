@@ -1,0 +1,68 @@
+--1) Найдите людей и их номера телефонов, код города которых начинается на  4 и заканчивается на 5.
+--( таблицы Person.PersonPhone, Person.Person)
+
+SELECT PERSON.FirstName,PERSON.LastName,PHONE.PhoneNumber
+
+FROM
+[Person].[Person] person join 
+[Person].[PersonPhone] phone
+ON phone.BusinessEntityID=person.BusinessEntityID
+WHERE SUBSTRING([PhoneNumber],1,3) LIKE '4%5'
+;
+
+
+--2) Отнести каждого человека из [HumanResources].[Employee] в свою возрастную категорию:
+--Adolescence: 17-20
+--Adults: 21-59
+--Elderly: 60-75
+--Senile: 76-90
+
+SELECT [BusinessEntityID],[BirthDate],(YEAR(GETDATE()) - YEAR([BirthDate])) AS AGE,
+
+CASE WHEN (YEAR(GETDATE()) - YEAR([BirthDate])) BETWEEN 17 AND 20 
+THEN 'Adolescence'
+WHEN (YEAR(GETDATE()) - YEAR([BirthDate])) BETWEEN 21 AND 59
+THEN 'Adults'
+WHEN (YEAR(GETDATE()) - YEAR([BirthDate])) BETWEEN 60 AND 75
+THEN 'Elderly'
+WHEN (YEAR(GETDATE()) - YEAR([BirthDate])) BETWEEN 76 AND 95
+THEN 'Senile'
+ELSE 'OTHER'
+END AGE
+FROM [HumanResources].[Employee];
+
+--3) Вывести самый дорогой продукт для каждого цвета из [Production].[Product]
+
+
+SELECT [Name],[Color],[StandardCost] FROM 
+ (
+
+SELECT [Name],[Color],[StandardCost],MAX([StandardCost]) OVER ( PARTITION BY [Color]) AS MAX_COST
+FROM [Production].[Product])T
+WHERE [StandardCost] = MAX_COST
+
+4) зоопарк
+7 сущностей + придумать 2 задачи
+
+1.Животные
+2.Корм
+3.Болезни животных
+4.Прививки
+5.Персонал
+6.Уборка
+7.Кормление
+
+1. Вывести всех животных, у которых в этом году нет прививики от бешенства.
+
+2. Вывести персонал, который убирает за леопардом по пятницам. 
+
+
+
+
+
+
+
+
+
+
+
