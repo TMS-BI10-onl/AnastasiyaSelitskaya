@@ -1,0 +1,87 @@
+1.Животные (ИД_животного Вид Название Вес Пол ДатаРождения СтранаОбитания ПродолжительностьЖизни ДатаПриема)
+2.Питание (ИД_рациона Вид Количество СколькоРазВДень)
+3.Болезни животных (ИД_болезни Название ДатаНачала ДатаКонца)
+4.Персонал (ИД_персонал ФИО Должность ДатаПриема Телефон)
+5.Уход (ИД_ухода ИД_рациона ИД_животного ДатаВремя_Уборки ДатаВремя_Кормления)
+6.Факты болезни (ИД_факт ИД_животного ИД_болезни ИД_персонал Дата_осмотра Статус (обнаружено\продолжается\завершено))
+
+1. Вывести статистику заболеваемости (кол-во болезней)животных
+из разных стран. Результаты вывести в виде транспорнированной таблицы (оси - страна и болезнь).
+
+SELECT * FROM (
+
+SELECT PETS.[Country],
+ILL2.NameIllness AS Illness ,
+ILL.IDPets
+FROM [dbo].[Pets_dim] AS PETS
+JOIN [dbo].[Illness_fct] AS ILL
+ON PETS.IDPets=ILL.IDPets
+JOIN [dbo].[Illness_dim] AS ILL2
+ON ILL.IDIllness=ILL2.IDillness
+
+)AS SourceTable 
+
+PIVOT
+(
+COUNT(IDPets)
+FOR Illness IN ([rabies], [scabies], [plague],[virus], [fever], [tumor] )
+) AS PivotTable
+
+2. Вывести статистику, что чаще - кормление до уборки или наоборот.
+
+SELECT FACT,COUNT([IDCare]) AS AMOUNT FROM 
+(
+SELECT [IDCare],
+CASE WHEN convert(nvarchar(30), [DateFeed], 25)<convert(nvarchar(30), [DateClean], 25)
+THEN 'FEED EARLIER CLEAN'
+ELSE 'CLEAN EARLIER FEED'
+END FACT
+FROM [dbo].[Care_fct]
+) AS STATISTICA
+
+GROUP BY FACT
+
+ Вывести процент случаев кормления до уборки ко всем дням.
+
+1/
+
+SELECT (AMOUNT* 100 / (Select Count(*) From [dbo].[Care_fct])) as Score
+FROM
+ (
+SELECT FACT,COUNT([IDCare]) AS AMOUNT FROM 
+(
+SELECT [IDCare],
+CASE WHEN convert(nvarchar(30), [DateFeed], 25)<convert(nvarchar(30), [DateClean], 25)
+THEN 'FEED EARLIER CLEAN'
+ELSE 'CLEAN EARLIER FEED'
+END FACT
+FROM [dbo].[Care_fct]
+) AS STATISTICA
+GROUP BY FACT 
+)
+ AS STAT
+WHERE FACT='FEED EARLIER CLEAN'
+GROUP BY  AMOUNT;
+
+2/
+
+WITH S (FACT,FACTCOUNT) 
+AS
+(
+SELECT FACT,COUNT([IDCare]) AS AMOUNT FROM 
+(
+SELECT [IDCare],
+CASE WHEN convert(nvarchar(30), [DateFeed], 25)<convert(nvarchar(30), [DateClean], 25)
+THEN 'FEED EARLIER CLEAN'
+ELSE 'CLEAN EARLIER FEED'
+END FACT
+FROM [dbo].[Care_fct]
+) AS STATISTICA
+
+GROUP BY FACT
+
+)
+
+SELECT FACT,FACTCOUNT*100/(select sum(FACTCOUNT) from S) AS SCORE
+FROM S
+WHERE FACT='FEED EARLIER CLEAN';
