@@ -1,0 +1,45 @@
+merge into [dbo].[FuncMerge] as Change_Table
+using (
+select a as f_name,count(*) as f_count from 
+(
+select a from [dbo].[data_for_merge]
+where a is not null
+ union all
+select b from [dbo].[data_for_merge]
+where b is not null
+union all
+select c from [dbo].[data_for_merge]
+where c is not null
+union all
+select d from [dbo].[data_for_merge]
+where d is not null
+union all
+select e from [dbo].[data_for_merge]
+where e is not null
+union all
+select f from [dbo].[data_for_merge]
+where f is not null
+union all
+select g from [dbo].[data_for_merge]
+where g is not null
+union all
+select h from [dbo].[data_for_merge]
+where h is not null
+union all
+select i from [dbo].[data_for_merge]
+where i is not null) as source
+
+group by a) as Table_Source
+
+on (Change_Table.function_name=Table_Source.f_name )
+WHEN MATCHED THEN
+update set Change_Table.function_name=Table_Source.f_name
+WHEN NOT MATCHED THEN 
+INSERT ([function_name],[function_count]) 
+                 VALUES (Table_Source.f_name,Table_Source.f_count);
+
+
+
+
+
+ 
