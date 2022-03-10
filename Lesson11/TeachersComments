@@ -1,0 +1,7 @@
+Well done!
+
+-3
+It's not a solution for merge. It has all precalculated numbers in a subquery. It's just the insert into another table. You needed to work with multiple merges.
+
+Mark: 7
+Test mark: 10
