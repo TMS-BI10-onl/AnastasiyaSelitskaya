@@ -1,0 +1,77 @@
+
+1. Фильм (id_фильма, название, год выпуска, id_киностудии, id_режиссера, id_актера) 
+FILM     ID_FILM,FILM_NAME,YEAR,ID_STUDIО,ID_PRODUCER, ID_ACTOR
+2. Киностудия (id_киностудии, название, год основания)
+STUDIO        ID_STUDIO,NAME,YEAR
+3. Режиссер (id_режиссера, ФИО, номер паспорта, год рождения, пол)
+PRODUCER    ID_PRODUCER,FIO,PASSPORT,BIRTHDATE,GENDER
+4. Актеры (id_актера, ФИО, номер паспорта, год рождения, пол)
+ACTOR     ID_ACTOR,FIO,PASSPORT,BIRTHDATE,GENDER
+5. Билеты(id_билета, id_фильма, id_кинотеатра, дата показа, дата продажи, цена)
+TICKETS   ID_TICKET,ID_FILM,ID_CINEMA,DATE_SHOW,DATE_SALE,PRICE
+6. Кинотеатр (id_кинотеатра, название, адрес, телефон)
+CINEMA       ID_CINEMA,NAME,ADDRESS,PHONE
+
+
+1) Вывести данные о фильмах и кол-ве проданных билетов в зависимости от того, как рано их покупают (за 1,2, ... дней до показа).
+ Результаты вывести в виде транспорнированной таблицы (оси - название фильма, кол-во дней от продажи до показа)
+
+
+SELECT * FROM (
+
+SELECT FILM.FILM_NAME, TICKETS.ID_TICKET, convert(nvarchar(30), TICKETS.DATE_SHOW, 25)-convert(nvarchar(30), TICKETS.DATE_SALE, 25) AS DAY_AMOUNT
+FROM FILM JOIN TICKETS ON
+FILM.ID_FILM=TICKETS.ID_FILM
+) AS SourceTable  
+
+PIVOT
+(
+COUNT(ID_TICKET)
+FOR DAY_AMOUNT IN ([1], [2], [3],[4], [5], [6],[7], [8], [9],[10], [11], [12],[13], [14])
+) AS PivotTable
+
+2) Вывести сведения о фильме с самым большим кассовым сбором за все время. 
+
+2/1
+SELECT TOP1 WITH TIES FILM, MAX (REVENUE) AS MAX_REV
+FROM (
+SELECT FILM.FILM_NAME AS FILM,COUNT(TICKETS.ID_TICKET)*TICKETS.PRICE AS REVENUE
+FROM FILM JOIN TICKETS ON
+FILM.ID_FILM=TICKETS.ID_FILM
+GROUP BY FILM.FILM_NAME) AS MAX_REVENUE
+
+GROUP BY FILM
+ORDER BY MAX (REVENUE) DESC;
+
+2/2
+
+
+SELECT FILM,REVENUE
+FROM (
+
+SELECT FILM ,
+        REVENUE,
+        MAX(REVENUE) OVER () AS MAX_REVENUE
+  FROM 
+(
+SELECT FILM.FILM_NAME AS FILM,COUNT(TICKETS.ID_TICKET)*TICKETS.PRICE AS REVENUE
+FROM FILM JOIN TICKETS ON
+FILM.ID_FILM=TICKETS.ID_FILM
+GROUP BY FILM.FILM_NAME
+
+) AS  REV
+
+WHERE REVENUE=MAX_REVENUE;
+
+
+
+
+
+
+
+
+
+
+
+
+
