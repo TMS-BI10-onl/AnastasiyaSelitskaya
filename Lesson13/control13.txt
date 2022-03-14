@@ -1,0 +1,65 @@
+1.Написать запрос на добавление в таблицу manufacturer нового производителя HP из Америки.
+
+INSERT INTO manufacturer (id, name, country_id) VALUES ('5', HP, '4');
+
+Признаюсь, я подзависла над этим инсертом.
+
+тут скорее всего через селект надо , чтобы указать Америку из таблицы country
+
+2.Написать запрос, благодаря которому возраст пользователя Андрей в таблице user уменьшится в 3 раза.
+
+update user
+set age=age/3 
+where name ='Андрей'
+
+3.Найти название продукта с максимальной ценой.
+
+Select Name,Price
+from (
+select Name,Price, max(price) over () as max_price from Ptoduct) PriceMax
+where Price=max_price;
+
+
+select top 1 with ties Name,max(price) as max_pr
+from Product
+group by Name
+order by max(price);
+
+select Name, Price
+from Product
+where Price = (select max(price) as max_pr from product)
+
+
+
+4.Написать запрос на выборку всех пользователей с телефонами, начинающимися на 3 и заканчивающимися на 4, либо с возрастом > 35.
+
+select user.id,user.name,phone.name from  user join phone
+    on user.id=phone.user_id
+where phone.name like '+3%4' or user.age>35;
+
+
+ если не учитывать к примеру +38073 то: 
+
+select user.id,user.name,phone.name from  user join phone
+    on user.id=phone.user_id
+where phone.name like '______3%4' or user.age>35;
+
+
+5.Найти топ 5 пользователей, кто купил больше всего продуктов.
+
+
+select top 5 cnt_product.user_id from
+(
+select user_id, count(product_id) as cnt
+group by user_id ) as cnt_product
+order by cnt_product.cnt;
+
+
+
+
+
+
+
+
+
+
