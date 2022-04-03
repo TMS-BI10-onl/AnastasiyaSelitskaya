@@ -1,0 +1,71 @@
+Решите следующие задачи:
+
+1.	Покажите всех менеджеров, которые имеют в подчинении больше 6-ти сотрудников.
+
+     SELECT manager.First_name, COUNT (*)
+     FROM employees empl JOIN employees manager ON (empl.manager_id = manager.employee_id)
+     GROUP BY mananager.First_name
+      HAVING COUNT (*) > 6;
+
+2.	Вывести min и max зарплату с вычетом commission_pct для каждого департамента. (commission_pct на базе указывается в процентах). 
+
+SELECT dep.DEPARTMENT_NAME,  min(Sal) as min_sal, max(Sal) as max_sal FROM 
+(
+SELECT empl.employee_id, dep.DEPARTMENT_NAME, empl.salary - empl.salary*empl.commission_pct/100 AS Sal
+FROM employees  empl  join  DEPARTMENTS dep on empl.department_id=dep.department_id
+)
+group dep.DEPARTMENT_NAME
+;
+
+3.	Вывести только регион, где работают больше всего людей.
+
+
+SELECT TOP 1 with ties REGION_NAME, COUNT (*) as cnt
+    FROM employees emp
+         JOIN departments dep ON emp.department_id = dep.department_id
+         JOIN locations loc ON dep.location_id = loc.location_id
+         JOIN countries c ON loc.country_id = c.country_id
+         JOIN regions reg ON c.region_id = reg.region_id
+GROUP BY REGION_NAME
+order by COUNT (*) desc;
+
+
+4.	Найдите разницу в процентах между средней зп по каждому департаменту от общей средней (по всем департаментам).
+
+
+select  dep.DEPARTMENT_NAME,avgDepsal,total_salary, avgDepSal*100/total_salary
+from
+(
+select dep.DEPARTMENT_NAME, avg(empl.salary) as avgDepSal , (select avg(salary) from  employees)  as total_salary
+from employees  empl join  DEPARTMENTS dep on empl.department_id=dep.department_id
+group dep.DEPARTMENT_NAME
+);
+
+
+5.	Найдите людей, кто проработал больше, чем 10 лет в одном департаменте. 
+
+select FIRST_NAME, LAST_NAME, COUNT(DEPARTMENT_ID)
+from employees  empl JOIN JOB_HISTORY HIST ON EMPL.department_id = HIST.department_id
+WHERE YEAR(GETDATE()) - YEAR(STARTDATE) >10
+AND END_DATE IS NULL 
+GROUP BY FIRST_NAME, LAST_NAME
+HAVING COUNT (*) =1
+
+
+
+
+6.	Найдите людей, кто занимает 5-10 место по размеру зарплаты.  
+
+
+SELECT FIRST_NAME, LAST_NAME, SALARY,RNK
+FROM (
+SELECT FIRST_NAME, LAST_NAME, SALARY, RANK() OVER (PARTITITON BY FIRST_NAME, LAST_NAME ORDER BY SALARY DESC) AS RNK
+FROM EMPLOYESS 
+)
+WHERE RNK BETWEEN 5 AND 10;
+
+
+
+
+
+
