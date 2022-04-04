@@ -1,0 +1,27 @@
+Well done!
+
+1, 3.
+Please, rememeber that count(1) is faster than count(*).
+
+2. -0.5
+Can be solved in one query.
+
+3. -0.5
+No need in the subquery. Count() can be used in the order by.
+
+4. -1
+Can be solved in one query. Not in 3.
+
+5.
+The task was not actually in this :)
+You needed to find all departments for every employee where he worked for more than 10 years.
+
+Mark: 8
+
+Test notes:
+KPI cards should be equal to each other.
+Count of movies - date filter is not correct, the first year should be 1997. What is a better filter for last 25 years: create a filter by release_date (not release date year), select relative date filtering and then type "in the last 25 years".
+Also, axises style is not changed.
+Financial table is so small.
+
+Test mark: 8
