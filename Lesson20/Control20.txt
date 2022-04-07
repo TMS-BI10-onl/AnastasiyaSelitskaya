@@ -1,0 +1,42 @@
+1. 2
+
+2. BEGIN TRAN
+TRUNCATE TABLE Employees  Таблица очистится от данных
+ROLLBACK Изменения отменяются
+SELECT * FROM Employees  В итоге селект выведет данные из таблицы Employees  
+
+3. 1 1
+   2 2
+   
+
+4. 1 1
+   2 2
+   4 null
+   null null
+   null null
+   
+5.1.  120
+
+5.2. если будeт NULL в Table_1 или повторяющиеся , то COUNT(*) будет больше , чем COUNT(DISTINCT Col_1)
+
+6. Тип отношения Покупатели» и «Заказы 
+Один ко многим
+
+7. тип отношения между таблицами «Товары» и «Заказы
+не связаны
+
+8. Ни одна нормальная форма не соблюдена  
+
+9. 1,9
+
+10. 1 John Doe
+    4 Bobby Louis
+    5 Lisa Romero
+
+11. select sum(x) from table1
+where x>0 or x%5=0 ;
+
+
+
+
+
